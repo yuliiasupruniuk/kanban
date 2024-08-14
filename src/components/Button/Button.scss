@@ -1,0 +1,24 @@
+.button {
+  padding: 0.875rem 1.75rem;
+  border-radius: 1.5rem;
+  font-weight: 500;
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  transition: background-color 0.15s linear 0.1s;
+
+  &.primary {
+    background-color: var(--main-purple);
+    color: white;
+    &:hover {
+      background-color: var(--main-purple-hover);
+    }
+  }
+}
+
+.icon {
+  width: 0.875rem;
+  height: auto;
+}
