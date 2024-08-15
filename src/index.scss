@@ -1,7 +1,6 @@
-
-@tailwind base; 
+@tailwind base;
 @tailwind components;
-@tailwind utilities; 
+@tailwind utilities;
 
 * {
   margin: 0;
@@ -18,10 +17,23 @@
   --red: #EA5555;
   --red-hover: #FF9898;
   --dark: #3E3F4E;
+  --medium-grey: #828FA3
 }
 
 
-html, body {
-  height: 100%;
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+html,
+body {
+  height: 100svh;
+  width: 100svw;
   background-color: var(--primary);
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+#root {
+  height: 100%;
 }

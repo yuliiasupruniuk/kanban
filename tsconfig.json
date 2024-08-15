@@ -7,10 +7,10 @@
       "esnext"
     ],
     "paths": {
-			"@/*": ["./*"],
-			"@icons/*": ["./assets/icons/*"],
+      "@icons/*": ["./assets/icons/*"],
       "@styles/*": ["./styles/*"],
-  },
+      "@constants/*": ["./constants/*"]
+    },
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

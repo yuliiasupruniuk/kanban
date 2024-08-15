@@ -1,6 +1,5 @@
-
 @mixin phone() {
-	@media (width <=767px) {
-		@content;
-	}
+    @media (width <=767px) {
+        @content;
+    }
 }

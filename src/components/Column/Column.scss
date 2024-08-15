@@ -1,0 +1,15 @@
+@import "../../styles/mixins";
+
+.circle {
+    width: 0.9375rem;
+    height: 0.9375rem;
+    border-radius: 50%;
+}
+
+.column {
+    width: 24rem;
+
+    @include phone {
+        width: calc(100svw - 3rem)
+    }
+}
