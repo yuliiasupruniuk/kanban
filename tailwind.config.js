@@ -7,7 +7,8 @@ module.exports = {
         "primary": "var(--primary)",
         "secondary": "var(--secondary)",
         "dark": "var(--dark)",
-        "medium-grey": "var(--medium-grey)"
+        "medium-grey": "var(--medium-grey)",
+        "red": "var(--red)"
       },
     },
   },

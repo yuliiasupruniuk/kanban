@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './styles/text';
+@import './styles/mixins';
+
 * {
   margin: 0;
   padding: 0;
@@ -17,7 +20,8 @@
   --red: #EA5555;
   --red-hover: #FF9898;
   --dark: #3E3F4E;
-  --medium-grey: #828FA3
+  --medium-grey: #828FA3;
+
 }
 
 
@@ -36,4 +40,32 @@ body {
 
 #root {
   height: 100%;
+}
+
+
+.MuiDialog-container>div {
+  background-color: none !important;
+  background-color: transparent !important;
+
+  label,
+  div {
+    color: white;
+  }
+
+  .MuiInputLabel-outlined.Mui-focused {
+    color: var(--main-purple-hover);
+  }
+
+  .MuiOutlinedInput-root.Mui-focused fieldset {
+    border-color: var(--main-purple-hover) !important;
+  }
+
+  fieldset {
+    width: 100%;
+    border-color: var(--primary);
+
+    &[class~="focused"] {
+      border-color: var(--main-purple) !important;
+    }
+  }
 }

@@ -5,7 +5,7 @@ export type ColumnProps = {
 
 export enum TaskStatus {
   ToDo = "todo",
-  InProgress = "in-progress",
+  InProgress = "inprogress",
   Done = "done",
 }
 

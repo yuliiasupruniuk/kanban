@@ -1,0 +1,9 @@
+.dialog-container [class~='MuiDialog-container'] > div {
+    background-color: none !important;
+    min-width: 30rem;
+}
+.dialog {
+    background-color: var(--secondary);
+    border-radius: 0.5rem;
+    padding: 36px 36px 48px !important;
+}

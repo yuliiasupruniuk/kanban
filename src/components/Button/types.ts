@@ -7,5 +7,8 @@ export enum ButtonType {
 export type ButtonProps = {
   label: string;
   type?: ButtonType;
+  loading?: boolean
   icon?: any;
+  className?: string
+  onClick?: () => void
 };
