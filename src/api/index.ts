@@ -17,13 +17,13 @@ async function apiRequest(method: string, url: string, body: {}) {
 
 const tasksCollectionRef = collection(db, "tasks");
 
-const createTask = async (task: Task) => {
- return await addDoc(tasksCollectionRef, task);
- 
+const createTask = async (task: Omit<Task, 'id'>): Promise<Task> => {
+  const data = await  addDoc(tasksCollectionRef, task);
+  return {...task, id: data.id}
 };
 
-const updateTask = async (id: string, task: Task) => {
-  const userDoc = doc(db, "tasks", id);
+const updateTask = async (task: Task) => {
+  const userDoc = doc(db, "tasks", task.id);
   const newFields = { ...task };
   await updateDoc(userDoc, newFields);
 };

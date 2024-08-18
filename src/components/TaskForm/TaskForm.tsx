@@ -6,62 +6,70 @@ import { TaskStatus } from "../Column/types";
 import { useForm, Controller } from "react-hook-form";
 import { TASK_STATUSES } from "../../constants/task-statuses";
 import { TaskFormProps, TaskFormValues } from "./types";
+import { Task } from "../Task/types";
+import { createTask, updateTask } from "../../api";
+import { generateFormSchema } from "./helpers";
+import { zodResolver } from "@hookform/resolvers/zod";
+import useTasksStore from "../../hooks/useTasksStore";
+import { useState } from "react";
+import FormField from "../FormField/FormField";
 
-
-const TaskForm = ({ mode }: TaskFormProps) => {
+const TaskForm = ({ task, isOpen, onClose }: TaskFormProps) => {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     handleSubmit,
     control,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<TaskFormValues>({
+    resolver: zodResolver(generateFormSchema()),
     defaultValues: {
-      title: "",
-      description: "",
-      status: TaskStatus.Done,
+      title: task?.title || "",
+      description: task?.description,
+      status: task?.status || TaskStatus.ToDo,
     },
   });
 
-  const onSubmit = (data: TaskFormValues) => {
-    reset();
+  const { taskList, setTasksList } = useTasksStore();
+
+  const onSubmit = async (formdata: Omit<Task, "id">) => {
+    setIsLoading(true);
+    if (task) {
+      const data = await updateTask({ ...formdata, id: task.id });
+      setIsLoading(false);
+      onClose();
+    } else {
+      const data = await createTask(formdata);
+      setTasksList([...taskList, data]);
+      console.log("created", data);
+      onClose();
+      setIsLoading(false);
+    }
   };
 
   return (
-    <PopupDialog open onClose={() => {}} selectedValue="">
+    <PopupDialog open={isOpen} onClose={onClose} selectedValue="">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
         <p className="title text-l font-extrabold">
-          {mode === "add" ? "Add New Task" : "Edit Task"}
+          {task ? "Edit New Task" : "Add Task"}
         </p>
 
-        <Controller
-          name="title"
-          control={control}
-          rules={{ required: "Title is required" }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              className="form-field"
-              label="Title"
-              variant="outlined"
-              error={!!errors.title}
-              helperText={errors.title?.message}
-            />
-          )}
-        />
+        <FormField name="title" control={control} label="Title" />
 
-        <Controller
+        <FormField
           name="description"
           control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              className="form-field"
-              label="Description"
-              variant="outlined"
-              multiline
-              rows={4}
-            />
-          )}
+          label="Description"
+          multiline
+          rows={4}
+        />
+
+        <FormField
+          name="status"
+          control={control}
+          label="Status"
+          select
+          options={Object.values(TASK_STATUSES)}
         />
 
         <Controller
@@ -85,7 +93,7 @@ const TaskForm = ({ mode }: TaskFormProps) => {
             >
               {Object.values(TASK_STATUSES).map((status) => (
                 <MenuItem key={status.value} value={status.value}>
-                  {status.title}
+                  {status.label}
                 </MenuItem>
               ))}
             </Select>
@@ -97,13 +105,13 @@ const TaskForm = ({ mode }: TaskFormProps) => {
             className="w-full"
             type={ButtonType.Secondary}
             label="Cancel"
-            onClick={() => reset()}
+            onClick={onClose}
           />
           <Button
             className="w-full"
             type={ButtonType.Primary}
-            label={mode === "add" ? "Create Task" : "Update Task"}
-            loading={isSubmitting}
+            label={task ? "Update Task" : "Create Task"}
+            isLoading={isSubmitting || isLoading}
             onClick={handleSubmit(onSubmit)}
           />
         </div>

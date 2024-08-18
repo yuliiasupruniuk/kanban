@@ -1,15 +1,15 @@
 import TaskCard from "../Task/Task";
 import styles from "./Column.module.scss";
 import { Task } from "../Task/types";
-import { Status } from "../../constants/task-statuses";
+import { TaskStatusInfo } from "../../constants/task-statuses";
 
-const Column = ({ status, tasks }: { status: Status, tasks: Task[] }) => {
+const Column = ({ status, tasks }: { status: TaskStatusInfo, tasks: Task[] }) => {
   return (
     <div className={`${styles.column} flex flex-col gap-6`}>
       <div className="flex items-center gap-2">
         <div className={styles.circle} style={{ background: status.color }}></div>
         <p className=" text-xs tracking-[0.15rem] font-bold text-medium-grey uppercase">
-          {status.title}
+          {status.label}
         </p>
       </div>
 

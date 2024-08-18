@@ -8,21 +8,23 @@ export interface SimpleDialogProps {
   onClose: (value: string) => void;
 }
 
-const PopupDialog = ({open, selectedValue, children, onClose}: SimpleDialogProps) => {
-
+const PopupDialog = ({
+  open,
+  selectedValue,
+  children,
+  onClose,
+}: SimpleDialogProps) => {
   const handleClose = () => {
     onClose(selectedValue);
   };
 
-  const handleListItemClick = (value: string) => {
-    onClose(value);
-  };
-
   return (
-    <Dialog className={styles["dialog-container"]} onClose={handleClose} open={open}>
-      <DialogContent className={styles.dialog}>
-        {children}
-      </DialogContent>
+    <Dialog
+      className={styles["dialog-container"]}
+      onClose={handleClose}
+      open={open}
+    >
+      <DialogContent className={styles.dialog}>{children}</DialogContent>
     </Dialog>
   );
 };

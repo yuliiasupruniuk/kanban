@@ -13,7 +13,7 @@ const KanbanView = () => {
           (task) => task.status === status.value
         );
         return (
-          <Column key={status.title} status={status} tasks={filteredTasks} />
+          <Column key={status.label} status={status} tasks={filteredTasks} />
         );
       })}
     </div>

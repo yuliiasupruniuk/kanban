@@ -7,9 +7,9 @@
 }
 
 .column {
-    width: 24rem;
+    min-width: 24rem;
 
     @include phone {
-        width: calc(100svw - 3rem)
+        min-width: calc(100svw - 3rem)
     }
 }

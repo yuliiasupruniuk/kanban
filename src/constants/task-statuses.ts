@@ -1,24 +1,24 @@
 import { TaskStatus } from "../components/Column/types";
 
-export type Status = {
-  title: string;
+export type TaskStatusInfo = {
+  label: string;
   value: string;
   color: string;
 };
 
-export const TASK_STATUSES: Record<TaskStatus, Status> = {
+export const TASK_STATUSES: Record<TaskStatus, TaskStatusInfo> = {
   [TaskStatus.ToDo]: {
-    title: "Todo",
+    label: "Todo",
     value: "todo",
     color: "#49C4E5",
   },
   [TaskStatus.InProgress]: {
-    title: "In Progress",
+    label: "In Progress",
     value: "inprogress",
     color: "#8471F2",
   },
   [TaskStatus.Done]: {
-    title: "Done",
+    label: "Done",
     value: "done",
     color: "#67E2AE",
   },

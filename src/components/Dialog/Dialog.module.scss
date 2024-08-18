@@ -1,7 +1,8 @@
-.dialog-container [class~='MuiDialog-container'] > div {
+.dialog-container [class~='MuiDialog-container']>div {
     background-color: none !important;
     min-width: 30rem;
 }
+
 .dialog {
     background-color: var(--secondary);
     border-radius: 0.5rem;
