@@ -5,5 +5,4 @@ export type Task = {
   title: string;
   description: string;
   status: TaskStatus;
-  created_at: string;
 };

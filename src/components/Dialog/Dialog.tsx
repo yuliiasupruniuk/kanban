@@ -1,5 +1,5 @@
 import { Dialog, DialogContent } from "@mui/material";
-import "./Dialog.scss";
+import styles from "./Dialog.module.scss";
 
 export interface SimpleDialogProps {
   open: boolean;
@@ -19,8 +19,8 @@ const PopupDialog = ({open, selectedValue, children, onClose}: SimpleDialogProps
   };
 
   return (
-    <Dialog className="dialog-container" onClose={handleClose} open={open}>
-      <DialogContent className="dialog">
+    <Dialog className={styles["dialog-container"]} onClose={handleClose} open={open}>
+      <DialogContent className={styles.dialog}>
         {children}
       </DialogContent>
     </Dialog>

@@ -2,7 +2,6 @@ import { MenuItem, Select, TextField } from "@mui/material";
 import Button from "../Button/Button";
 import { ButtonType } from "../Button/types";
 import PopupDialog from "../Dialog/Dialog";
-import "./TaskForm.scss";
 import { TaskStatus } from "../Column/types";
 import { useForm, Controller } from "react-hook-form";
 import { TASK_STATUSES } from "../../constants/task-statuses";
