@@ -9,39 +9,49 @@ import {
 import { Task } from "../components/Task/types";
 import { db } from "../firebase";
 
-async function apiRequest(method: string, url: string, body: {}) {
-  const response = await fetch(url, { method, body: JSON.stringify(body) });
-  const data = await response.json();
-  return data;
-}
-
 const tasksCollectionRef = collection(db, "tasks");
 
+const handleAsyncError = async <T>(fn: () => Promise<T>, errorMessage: string): Promise<T> => {
+  try {
+    return await fn();
+  } catch (error) {
+    console.error(errorMessage, error);
+    throw new Error(errorMessage);
+  }
+};
+
 const createTask = async (task: Omit<Task, 'id'>): Promise<Task> => {
-  const data = await  addDoc(tasksCollectionRef, task);
-  return {...task, id: data.id}
+  return handleAsyncError(async () => {
+    const data = await addDoc(tasksCollectionRef, task);
+    return { ...task, id: data.id };
+  }, "Failed to create task");
 };
 
-const updateTask = async (task: Task) => {
-  const userDoc = doc(db, "tasks", task.id);
-  const newFields = { ...task };
-  await updateDoc(userDoc, newFields);
+const updateTask = async (task: Task): Promise<void> => {
+  return handleAsyncError(async () => {
+    const taskDocRef = doc(db, "tasks", task.id);
+    await updateDoc(taskDocRef, task);
+  }, "Failed to update task");
 };
 
-const deleteTask = async (id: string) => {
-  const taskDoc = doc(db, "tasks", id);
-  await deleteDoc(taskDoc);
+const deleteTask = async (id: string): Promise<void> => {
+  return handleAsyncError(async () => {
+    const taskDocRef = doc(db, "tasks", '');
+    const data = await deleteDoc(taskDocRef);
+    console.log("data", data)
+  }, "Failed to delete task");
 };
 
-const getTasks = async () => {
-  const data = await getDocs(tasksCollectionRef);
-  return data.docs.map(doc => ({id: doc.id, ...doc.data()} as Task))
+const getTasks = async (): Promise<Task[]> => {
+  return handleAsyncError(async () => {
+    const querySnapshot = await getDocs(tasksCollectionRef);
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Task));
+  }, "Failed to fetch tasks");
 };
-
 
 export {
-    createTask,
-    updateTask,
-    deleteTask,
-    getTasks
-}
+  createTask,
+  updateTask,
+  deleteTask,
+  getTasks
+};

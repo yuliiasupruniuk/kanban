@@ -72,34 +72,6 @@ const TaskForm = ({ task, isOpen, onClose }: TaskFormProps) => {
           options={Object.values(TASK_STATUSES)}
         />
 
-        <Controller
-          name="status"
-          control={control}
-          render={({ field }) => (
-            <Select
-              {...field}
-              label="Status"
-              className="form-field"
-              MenuProps={{
-                PaperProps: {
-                  sx: {
-                    bgcolor: "var(--primary)",
-                    "& .MuiMenuItem-root": {
-                      padding: 2,
-                    },
-                  },
-                },
-              }}
-            >
-              {Object.values(TASK_STATUSES).map((status) => (
-                <MenuItem key={status.value} value={status.value}>
-                  {status.label}
-                </MenuItem>
-              ))}
-            </Select>
-          )}
-        />
-
         <div className="flex gap-6">
           <Button
             className="w-full"

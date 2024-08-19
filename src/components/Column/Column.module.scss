@@ -8,8 +8,11 @@
 
 .column {
     min-width: 24rem;
+    max-width: 24rem;
 
     @include phone {
-        min-width: calc(100svw - 3rem)
+        min-width: calc(100svw - 3rem);
+        max-width: calc(100svw - 3rem)
+
     }
 }
