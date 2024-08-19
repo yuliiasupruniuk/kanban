@@ -41,7 +41,6 @@ const TaskForm = ({ task, isOpen, onClose }: TaskFormProps) => {
     } else {
       const data = await createTask(formdata);
       setTasksList([...taskList, data]);
-      console.log("created", data);
       onClose();
       setIsLoading(false);
     }

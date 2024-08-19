@@ -1,13 +1,33 @@
+import React, { CSSProperties, useMemo } from "react";
+import { useDraggable } from "@dnd-kit/core";
 import { Task } from "./types";
 import styles from "./Task.module.scss";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import DeleteTaskDialog from "../DeleteTaskDialog/DeleteTaskDialog";
-import { useState } from "react";
 import TaskForm from "../TaskForm/TaskForm";
+import useTasksStore from "../../hooks/useTasksStore";
 
 const TaskCard = ({ task }: { task: Task }) => {
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
+
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: task.id,
+  });
+
+  const { initialPointerOffset } = useTasksStore();
+
+  const style: CSSProperties = useMemo(
+    () =>
+      transform
+        ? {
+            transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+            top: initialPointerOffset.y - 50,
+            cursor: "grab",
+          }
+        : {},
+    [transform, initialPointerOffset]
+  );
 
   const contextMenu = [
     {
@@ -22,23 +42,28 @@ const TaskCard = ({ task }: { task: Task }) => {
 
   return (
     <>
-      <div className={`${styles.card} py-5 px-4 bg-secondary rounded-lg`}>
+      <div
+        ref={setNodeRef}
+        style={style}
+        {...listeners}
+        {...attributes}
+        className={`${styles.card} ${
+          transform ? styles.dragged : ""
+        } py-5 px-4 bg-secondary rounded-lg`}
+      >
         <div className={`${styles.title} flex justify-between gap-2`}>
           {task.title}
-          <ContextMenu
-            id={task.id + "context-menu"}
-            options={contextMenu}
-          />
+          <ContextMenu id={task.id + "context-menu"} options={contextMenu} />
         </div>
-        <p className={styles.description}>
-          {task.description}
-        </p>
-        <p className={styles.date}>2011-11-18 14:54:39.929Z</p>
+        <p className={styles.description}>{task.description}</p>
+        <p className={styles.date}>Date</p>
       </div>
 
-
-      <TaskForm task={task} isOpen={isEditDialogOpen}
-        onClose={() => setIsEditDialogOpen(false)} />
+      <TaskForm
+        task={task}
+        isOpen={isEditDialogOpen}
+        onClose={() => setIsEditDialogOpen(false)}
+      />
 
       <DeleteTaskDialog
         title={task.title}
@@ -46,8 +71,6 @@ const TaskCard = ({ task }: { task: Task }) => {
         isOpen={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
       />
-
-
     </>
   );
 };

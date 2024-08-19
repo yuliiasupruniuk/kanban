@@ -17,7 +17,8 @@ function ContextMenu({
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleClose = (event: any) => {
+    // TODO: click on context menu make card draggable
     setAnchorEl(null);
   };
 
@@ -42,9 +43,9 @@ function ContextMenu({
         {options.map((option) => (
           <MenuItem
             key={option.label}
-            onClick={() => {
+            onClick={(event) => {
               option.action();
-              handleClose();
+              handleClose(event);
             }}
           >
             {option.label}

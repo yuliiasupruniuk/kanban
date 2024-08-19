@@ -18,7 +18,7 @@ function App() {
   }, []);
 
   return (
-    <div className="h-full grid grid-rows-[max-content_minmax(0,_1fr)]">
+    <div className="grid grid-rows-[max-content_minmax(0,_1fr)] h-svh w-svw">
       <Header />
       <KanbanView />
     </div>

@@ -23,3 +23,10 @@
         color: var(--medium-grey);
     }
 }
+
+.dragged {
+    position: absolute;
+    width: 24rem;
+    z-index: 5;
+    opacity: 0.8;
+}
