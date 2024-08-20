@@ -18,14 +18,21 @@ function ContextMenu({
     setAnchorEl(event.currentTarget);
   };
   const handleClose = (event: any) => {
-    // TODO: click on context menu make card draggable
     setAnchorEl(null);
   };
 
+  const stopDragPropagation = (event: React.MouseEvent | React.TouchEvent) => {
+    event?.stopPropagation();
+    event?.preventDefault();
+  };
+
   return (
-    <div>
+    <div
+      onClick={stopDragPropagation}
+      onPointerDown={stopDragPropagation}
+    >
       <IconButton id={id} onClick={handleClick}>
-        <img src={VerticalEllipsisIcon} className="h-4" alt='' />
+        <img src={VerticalEllipsisIcon} className="h-4" alt="" />
       </IconButton>
       <Menu
         id={id}

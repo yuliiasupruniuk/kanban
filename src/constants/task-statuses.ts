@@ -1,4 +1,4 @@
-import { TaskStatus } from "../components/Column/types";
+import { TaskStatus } from "components/Column/types";
 
 export type TaskStatusInfo = {
   label: string;

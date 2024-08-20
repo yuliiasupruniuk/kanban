@@ -1,3 +1,4 @@
+import useSnackbar from "components/Snackbar/hook/useSnackbar";
 import { Dispatch, SetStateAction, useState } from "react";
 
 type UseRequestParams<T> = {
@@ -24,6 +25,8 @@ export default function useRequest<T>({
   const [data, setData] = useState<T>();
   const [isLoading, setIsLoading] = useState(initialLoading);
 
+  const { openSnackbar } = useSnackbar();
+
   const execute = async (...args: any[]): Promise<T | undefined> => {
     if (isLoading && !initialLoading) {
       return;
@@ -31,21 +34,18 @@ export default function useRequest<T>({
     setIsLoading(true);
 
     try {
-      await callback(...(args.length > 0 ? args : initialArgs));
-
+      const result = await callback(...(args.length > 0 ? args : initialArgs));
+      setData(result);
       handleResponse();
-      return data;
-    } catch (error) {
-      showErrorToast();
+      return result;
+    } catch (error: any) {
+      console.log("catch")
+      openSnackbar(error.message || "An unexpected error occurred");
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
     }
   };
-
-  function showErrorToast(message?: string) {
-    alert(message);
-  }
 
   return { data, setData, isLoading, execute };
 }

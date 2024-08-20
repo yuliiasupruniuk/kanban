@@ -1,7 +1,10 @@
-import TaskCard from "../Task/Task";
 import styles from "./Column.module.scss";
 import { Task } from "../Task/types";
 import { TaskStatusInfo } from "../../constants/task-statuses";
+import { Suspense, lazy } from "react";
+import TaskListLoading from "components/Task/TaskLoading";
+
+const TaskCard = lazy(() => import("../Task/Task"));
 
 const Column = ({
   status,
@@ -23,9 +26,11 @@ const Column = ({
       </div>
 
       <div className="flex flex-col gap-6 overflow-auto scroll-smooth">
-        {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
-        ))}
+        <Suspense fallback={<TaskListLoading />}>
+          {tasks.map((task) => (
+            <TaskCard key={task.id} task={task} />
+          ))}
+        </Suspense>
       </div>
     </div>
   );

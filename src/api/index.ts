@@ -9,9 +9,13 @@ import {
 import { Task } from "../components/Task/types";
 import { db } from "../firebase";
 
-const tasksCollectionRef = collection(db, "tasks");
+const DOCUMENT_NAME = "tasks";
+const COLLECTION_REF = collection(db, DOCUMENT_NAME);
 
-const handleAsyncError = async <T>(fn: () => Promise<T>, errorMessage: string): Promise<T> => {
+const handleAsyncError = async <T>(
+  fn: () => Promise<T>,
+  errorMessage: string
+): Promise<T> => {
   try {
     return await fn();
   } catch (error) {
@@ -20,10 +24,11 @@ const handleAsyncError = async <T>(fn: () => Promise<T>, errorMessage: string): 
   }
 };
 
-const createTask = async (task: Omit<Task, 'id'>): Promise<Task> => {
+const createTask = async (task: Omit<Task, "id">): Promise<Task> => {
   return handleAsyncError(async () => {
-    const data = await addDoc(tasksCollectionRef, task);
-    return { ...task, id: data.id };
+    const data = await addDoc(COLLECTION_REF, null);
+    console.log("data", data);
+    return { ...task, id: "id" };
   }, "Failed to create task");
 };
 
@@ -36,22 +41,18 @@ const updateTask = async (task: Task): Promise<void> => {
 
 const deleteTask = async (id: string): Promise<void> => {
   return handleAsyncError(async () => {
-    const taskDocRef = doc(db, "tasks", '');
-    const data = await deleteDoc(taskDocRef);
-    console.log("data", data)
+    const taskDocRef = doc(db, "tasks", id);
+    await deleteDoc(taskDocRef);
   }, "Failed to delete task");
 };
 
 const getTasks = async (): Promise<Task[]> => {
   return handleAsyncError(async () => {
-    const querySnapshot = await getDocs(tasksCollectionRef);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Task));
+    const querySnapshot = await getDocs(COLLECTION_REF);
+    return querySnapshot.docs.map(
+      (doc) => ({ id: doc.id, ...doc.data() } as Task)
+    );
   }, "Failed to fetch tasks");
 };
 
-export {
-  createTask,
-  updateTask,
-  deleteTask,
-  getTasks
-};
+export { createTask, updateTask, deleteTask, getTasks };

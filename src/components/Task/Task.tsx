@@ -5,28 +5,23 @@ import styles from "./Task.module.scss";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import DeleteTaskDialog from "../DeleteTaskDialog/DeleteTaskDialog";
 import TaskForm from "../TaskForm/TaskForm";
-import useTasksStore from "../../hooks/useTasksStore";
 
 const TaskCard = ({ task }: { task: Task }) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
-
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: task.id,
   });
-
-  const { initialPointerOffset } = useTasksStore();
 
   const style: CSSProperties = useMemo(
     () =>
       transform
         ? {
             transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-            top: initialPointerOffset.y - 50,
             cursor: "grab",
           }
         : {},
-    [transform, initialPointerOffset]
+    [transform]
   );
 
   const contextMenu = [

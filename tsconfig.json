@@ -6,11 +6,7 @@
       "dom.iterable",
       "esnext"
     ],
-    "paths": {
-      "@icons/*": ["./assets/icons/*"],
-      "@styles/*": ["./styles/*"],
-      "@constants/*": ["./constants/*"]
-    },
+    "baseUrl": "./src",
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -27,5 +23,10 @@
   },
   "include": [
     "src"
-, "src/firebase.js"  ]
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    "dist"
+  ]
 }

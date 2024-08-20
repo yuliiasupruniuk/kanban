@@ -15,9 +15,28 @@ import { TASK_STATUSES } from "../../constants/task-statuses";
 import useTasksStore from "../../hooks/useTasksStore";
 import Column from "../Column/Column";
 import styles from "./KanbanView.module.scss";
+import useSnackbar from "components/Snackbar/hook/useSnackbar";
+import { useEffect } from "react";
+import { getTasks } from "api";
+
 
 const KanbanView = () => {
   const { taskList, setTasksList, setInitialPointerOffset } = useTasksStore();
+  const { openSnackbar } = useSnackbar()
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const tasks = await getTasks();
+        setTasksList(tasks);
+      } catch (error) {
+        openSnackbar((error as Error).message);
+      }
+    };
+
+    fetchTasks();
+  }, [setTasksList, openSnackbar]);
+
 
   const handleDragStart = (event: any) => {
     const { activatorEvent } = event;
@@ -76,6 +95,7 @@ const KanbanView = () => {
               items={filteredTasks.map((task) => task.id)}
               strategy={rectSortingStrategy}
             >
+              
               <Column
                 key={"droppable-" + status.value}
                 status={status}
