@@ -1,16 +1,7 @@
-import { TaskStatus } from "../Column/types";
-import { Task } from "../Task/types";
+import { TaskStatus } from "components/Column/types";
 
-export type TaskFormProps = {
-    task?: Task
-    isOpen: boolean;
-    onClose: () => void;
-  }
-  
-  export type  TaskFormValues = {
-    title: string;
-    description: string;
-    status: TaskStatus;
-    
-  }
-  
+export type TaskFormValues = {
+  title: string;
+  description: string;
+  status: TaskStatus;
+};

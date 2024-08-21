@@ -26,9 +26,8 @@ const handleAsyncError = async <T>(
 
 const createTask = async (task: Omit<Task, "id">): Promise<Task> => {
   return handleAsyncError(async () => {
-    const data = await addDoc(COLLECTION_REF, null);
-    console.log("data", data);
-    return { ...task, id: "id" };
+    const data = await addDoc(COLLECTION_REF, task);
+    return { ...task, id: data.id };
   }, "Failed to create task");
 };
 

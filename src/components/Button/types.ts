@@ -6,7 +6,8 @@ export enum ButtonType {
 
 export type ButtonProps = {
   label: string;
-  type?: ButtonType;
+  type?: "button" | "submit" | "reset" ;
+  btnStyle?: ButtonType;
   isLoading?: boolean;
   icon?: any;
   className?: string;

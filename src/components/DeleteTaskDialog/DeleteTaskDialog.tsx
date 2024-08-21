@@ -1,56 +1,49 @@
 import { CircularProgress } from "@mui/material";
-import { deleteTask } from "../../api";
-import useRequest from "../../hooks/useRequest";
-import Button from "../Button/Button";
-import { ButtonType } from "../Button/types";
-import PopupDialog from "../Dialog/Dialog";
-import useTasksStore from "../../hooks/useTasksStore";
+import { deleteTask } from "api";
+import Button from "components/Button/Button";
+import { ButtonType } from "components/Button/types";
+import PopupDialog from "components/Dialog/Dialog";
+import useRequest from "hooks/useRequest";
+import useTasksStore from "hooks/useTasksStore";
+import useDeleteTaskDialog from "./hook/useDeleteTaskDialog";
 
-const DeleteTaskDialog = ({
-  title,
-  id,
-  isOpen,
-  onClose,
-}: {
-  title: string;
-  id: string;
-  isOpen: boolean;
-  onClose: () => void;
-}) => {
+const DeleteTaskDialog = () => {
   const { taskList, setTasksList } = useTasksStore();
+  const { isOpen, task, closeDialog } = useDeleteTaskDialog();
   const { execute: deleteCurrentTask, isLoading } = useRequest<any>({
     callback: deleteTask,
     handleResponse: () => {
-      setTasksList(taskList.filter((task) => task.id !== id));
-      onClose();
+      setTasksList(taskList.filter((t) => t.id !== task?.id));
+      closeDialog();
     },
   });
 
   return (
-    <PopupDialog open={isOpen} onClose={onClose} selectedValue="">
+    <PopupDialog open={isOpen} onClose={closeDialog} selectedValue="">
       <div className="flex flex-col gap-6">
         <p className="title text-red text-l font-extrabold">
           Delete this task?
         </p>
 
         <p className="content text-medium-grey text-m font-bold">
-          Are you sure you want to delete the "{title}" task and its subtasks?
-          This action cannot be reversed.
+          Are you sure you want to delete the "{task?.title}" task and its
+          subtasks? This action cannot be reversed.
         </p>
 
         <div className="flex gap-6">
           <Button
             className="w-full"
-            type={ButtonType.Destructive}
+            type="submit"
+            btnStyle={ButtonType.Destructive}
             icon={isLoading && <CircularProgress size={16} />}
-            onClick={() => deleteCurrentTask(id)}
+            onClick={() => deleteCurrentTask(task?.id)}
             label="Delete"
           />
           <Button
             className="w-full"
-            type={ButtonType.Secondary}
+            btnStyle={ButtonType.Secondary}
             label="Cancel"
-            onClick={onClose}
+            onClick={closeDialog}
           />
         </div>
       </div>

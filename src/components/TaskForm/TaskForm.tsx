@@ -1,7 +1,6 @@
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useTasksStore from "hooks/useTasksStore";
 import { createTask, updateTask } from "api";
 import { generateFormSchema } from "./helpers";
@@ -9,16 +8,23 @@ import useSnackbar from "components/Snackbar/hook/useSnackbar";
 import { TaskStatus } from "components/Column/types";
 import FormField from "components/FormField/FormField";
 import { TASK_STATUSES } from "constants/task-statuses";
-import { TaskFormProps, TaskFormValues } from "./types";
 import { Task } from "components/Task/types";
 import PopupDialog from "components/Dialog/Dialog";
 import Button from "components/Button/Button";
 import { ButtonType } from "components/Button/types";
+import useTaskForm from "./hook/useTaskForm";
+import { TaskFormValues } from "./types";
 
-const TaskForm = ({ task, isOpen, onClose }: TaskFormProps) => {
+const TaskForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { openSnackbar } = useSnackbar();
-  const { handleSubmit, control, formState: { isSubmitting } } = useForm<TaskFormValues>({
+  const { task, closeForm, isOpen } = useTaskForm();
+  const {
+    handleSubmit,
+    control,
+    formState: { isSubmitting },
+    reset: resetForm,
+  } = useForm<TaskFormValues>({
     resolver: zodResolver(generateFormSchema()),
     defaultValues: {
       title: task?.title || "",
@@ -29,16 +35,21 @@ const TaskForm = ({ task, isOpen, onClose }: TaskFormProps) => {
 
   const { taskList, setTasksList } = useTasksStore();
 
+  useEffect(() => {
+    if (task) resetForm(task);
+  }, [task, resetForm]);
+
   const onSubmit = async (formData: Omit<Task, "id">) => {
     setIsLoading(true);
     try {
       if (task) {
         await updateTask({ ...formData, id: task.id });
       } else {
-        const data = await createTask(formData);
+        const newTask = { ...formData, createdAt: Date.now() };
+        const data = await createTask(newTask);
         setTasksList([...taskList, data]);
       }
-      onClose();
+      handleFormClose();
     } catch (error: any) {
       openSnackbar(error?.message || "An error occurred");
     } finally {
@@ -46,8 +57,12 @@ const TaskForm = ({ task, isOpen, onClose }: TaskFormProps) => {
     }
   };
 
+  const handleFormClose = () => {
+    closeForm();
+  };
+
   return (
-    <PopupDialog open={isOpen} onClose={onClose} selectedValue="">
+    <PopupDialog open={isOpen} onClose={handleFormClose} selectedValue="">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
         <p className="title text-l font-extrabold">
           {task ? "Edit Task" : "Add Task"}
@@ -74,16 +89,16 @@ const TaskForm = ({ task, isOpen, onClose }: TaskFormProps) => {
         <div className="flex gap-6">
           <Button
             className="w-full"
-            type={ButtonType.Secondary}
+            btnStyle={ButtonType.Secondary}
             label="Cancel"
-            onClick={onClose}
+            onClick={handleFormClose}
           />
           <Button
             className="w-full"
-            type={ButtonType.Primary}
+            type="submit"
+            btnStyle={ButtonType.Primary}
             label={task ? "Update Task" : "Create Task"}
             isLoading={isSubmitting || isLoading}
-            onClick={handleSubmit(onSubmit)}
           />
         </div>
       </form>

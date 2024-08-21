@@ -1,8 +1,8 @@
 import styles from "./Column.module.scss";
-import { Task } from "../Task/types";
-import { TaskStatusInfo } from "../../constants/task-statuses";
 import { Suspense, lazy } from "react";
 import TaskListLoading from "components/Task/TaskLoading";
+import { TaskStatusInfo } from "constants/task-statuses";
+import { Task } from "components/Task/types";
 
 const TaskCard = lazy(() => import("../Task/Task"));
 
@@ -27,9 +27,9 @@ const Column = ({
 
       <div className="flex flex-col gap-6 overflow-auto scroll-smooth">
         <Suspense fallback={<TaskListLoading />}>
-          {tasks.map((task) => (
+          {tasks.length ? tasks.map((task) => (
             <TaskCard key={task.id} task={task} />
-          ))}
+          )) : <p className="text-center">No tasks yet</p>}
         </Suspense>
       </div>
     </div>

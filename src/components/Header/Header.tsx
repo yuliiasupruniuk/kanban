@@ -1,30 +1,23 @@
-import { default as LogoLight } from "../../assets/icons/logo-light.svg";
-import { default as AddIcon } from "../../assets/icons/add-task-mobile.svg";
+import { default as LogoLight } from "assets/icons/logo-light.svg";
+import { default as AddIcon } from "assets/icons/add-icon.svg";
 
-import Button from "../Button/Button";
-import { ButtonType } from "../Button/types";
-import { useState } from "react";
-import TaskForm from "../TaskForm/TaskForm";
+import { ButtonType } from "components/Button/types";
+import Button from "components/Button/Button";
+import useTaskForm from "components/TaskForm/hook/useTaskForm";
 
 const Header = () => {
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const { openForm: openCreateTaskDialog } = useTaskForm();
 
   return (
-    <>
-      <div className="h-24 px-6 flex justify-between bg-secondary items-center border-b-2 border-dark">
-        <img src={LogoLight} alt="Logo Dark" className="h-6 w-auto" />
-        <Button
-          label="Add new task"
-          type={ButtonType.Primary}
-          icon={AddIcon}
-          onClick={() => setIsCreateDialogOpen(true)}
-        />
-      </div>
-      <TaskForm
-        isOpen={isCreateDialogOpen}
-        onClose={() => setIsCreateDialogOpen(false)}
+    <div className="h-24 px-6 flex justify-between bg-secondary items-center border-b-2 border-dark">
+      <img src={LogoLight} alt="Logo Dark" className="h-6 w-auto" />
+      <Button
+        label="Add new task"
+        btnStyle={ButtonType.Primary}
+        icon={AddIcon}
+        onClick={() => openCreateTaskDialog()}
       />
-    </>
+    </div>
   );
 };
 

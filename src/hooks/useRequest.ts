@@ -39,9 +39,9 @@ export default function useRequest<T>({
       handleResponse();
       return result;
     } catch (error: any) {
-      console.log("catch")
       openSnackbar(error.message || "An unexpected error occurred");
-      return Promise.reject(error);
+      // Comment out this line to avoid re-throwing the error
+      // return Promise.reject(error);
     } finally {
       setIsLoading(false);
     }

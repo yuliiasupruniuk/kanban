@@ -2,7 +2,7 @@ import * as React from "react";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import VerticalEllipsisIcon from "../../assets/icons/icon-vertical-ellipsis.svg";
+import VerticalEllipsisIcon from "assets/icons/icon-vertical-ellipsis.svg";
 
 const ITEM_HEIGHT = 48;
 

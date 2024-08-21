@@ -24,12 +24,6 @@
 
 }
 
-
-::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
-}
-
 html,
 body {
   height: 100svh;
@@ -42,6 +36,26 @@ body {
   height: 100%;
 }
 
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+
+
+/* MUI components customization */
+
+.MuiPaper-root * {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+}
+
+.MuiMenu-list {
+  background-color: var(--primary) !important;
+
+  .Mui-selected {
+    background-color: var(--secondary) !important;
+  }
+}
 
 .MuiDialog-container>div {
   background-color: none !important;

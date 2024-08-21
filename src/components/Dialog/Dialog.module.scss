@@ -1,6 +1,14 @@
+@import "../../styles/mixins";
+
 .dialog-container [class~='MuiDialog-container']>div {
     background-color: none !important;
     min-width: 30rem;
+    max-width: 30rem;
+
+    @include phone {
+        min-width: calc(100% - 2rem);
+        max-width: calc(100% - 2rem);
+    }
 }
 
 .dialog {

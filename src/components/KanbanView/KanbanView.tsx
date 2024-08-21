@@ -11,13 +11,13 @@ import {
   rectSortingStrategy,
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
-import { TASK_STATUSES } from "../../constants/task-statuses";
-import useTasksStore from "../../hooks/useTasksStore";
-import Column from "../Column/Column";
 import styles from "./KanbanView.module.scss";
 import useSnackbar from "components/Snackbar/hook/useSnackbar";
 import { useEffect } from "react";
 import { getTasks } from "api";
+import useTasksStore from "hooks/useTasksStore";
+import { TASK_STATUSES } from "constants/task-statuses";
+import Column from "components/Column/Column";
 
 
 const KanbanView = () => {

@@ -1,5 +1,5 @@
 import { Controller } from "react-hook-form";
-import { TextField, Select, MenuItem } from "@mui/material";
+import { TextField, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import { Option } from "./types";
 
 const FormField = ({
@@ -25,27 +25,29 @@ const FormField = ({
       control={control}
       render={({ field, fieldState: { error } }) =>
         select ? (
-          <Select
-            {...field}
-            label={label}
-            className="form-field"
-            MenuProps={{
-              PaperProps: {
-                sx: {
-                  bgcolor: "var(--primary)",
-                  "& .MuiMenuItem-root": {
-                    padding: 2,
+          <FormControl variant="outlined" className="form-field" error={!!error}>
+            <InputLabel>{label}</InputLabel>
+            <Select
+              {...field}
+              label={label}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    bgcolor: "var(--primary)",
+                    "& .MuiMenuItem-root": {
+                      padding: 2,
+                    },
                   },
                 },
-              },
-            }}
-          >
-            {options.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </Select>
+              }}
+            >
+              {options.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         ) : (
           <TextField
             {...field}

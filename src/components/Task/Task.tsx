@@ -1,14 +1,16 @@
-import React, { CSSProperties, useMemo } from "react";
+import { CSSProperties, useMemo } from "react";
 import { useDraggable } from "@dnd-kit/core";
-import { Task } from "./types";
 import styles from "./Task.module.scss";
-import ContextMenu from "../ContextMenu/ContextMenu";
-import DeleteTaskDialog from "../DeleteTaskDialog/DeleteTaskDialog";
-import TaskForm from "../TaskForm/TaskForm";
+import ContextMenu from "components/ContextMenu/ContextMenu";
+import { Task } from "./types";
+import useTaskForm from "components/TaskForm/hook/useTaskForm";
+import useDeleteTaskDialog from "components/DeleteTaskDialog/hook/useDeleteTaskDialog";
+import { timeAgo } from "utils/time-ago";
 
 const TaskCard = ({ task }: { task: Task }) => {
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
+  const { openDialog: openDeleteDialog } = useDeleteTaskDialog();
+  const { openForm: openEditDialog } = useTaskForm();
+
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: task.id,
   });
@@ -27,46 +29,31 @@ const TaskCard = ({ task }: { task: Task }) => {
   const contextMenu = [
     {
       label: "Edit",
-      action: () => setIsEditDialogOpen(true),
+      action: () => openEditDialog(task),
     },
     {
       label: "Delete",
-      action: () => setIsDeleteDialogOpen(true),
+      action: () => openDeleteDialog(task),
     },
   ];
 
   return (
-    <>
-      <div
-        ref={setNodeRef}
-        style={style}
-        {...listeners}
-        {...attributes}
-        className={`${styles.card} ${
-          transform ? styles.dragged : ""
-        } py-5 px-4 bg-secondary rounded-lg`}
-      >
-        <div className={`${styles.title} flex justify-between gap-2`}>
-          {task.title}
-          <ContextMenu id={task.id + "context-menu"} options={contextMenu} />
-        </div>
-        <p className={styles.description}>{task.description}</p>
-        <p className={styles.date}>Date</p>
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
+      className={`${styles.card} ${
+        transform ? styles.dragged : ""
+      } py-5 px-4 bg-secondary rounded-lg`}
+    >
+      <div className={`${styles.title} flex justify-between gap-2`}>
+        {task.title}
+        <ContextMenu id={task.id + "context-menu"} options={contextMenu} />
       </div>
-
-      <TaskForm
-        task={task}
-        isOpen={isEditDialogOpen}
-        onClose={() => setIsEditDialogOpen(false)}
-      />
-
-      <DeleteTaskDialog
-        title={task.title}
-        id={task.id}
-        isOpen={isDeleteDialogOpen}
-        onClose={() => setIsDeleteDialogOpen(false)}
-      />
-    </>
+      <p className={styles.description}>{task.description}</p>
+      <p className={styles.date}>{task?.createdAt && timeAgo(task.createdAt)}</p>
+    </div>
   );
 };
 

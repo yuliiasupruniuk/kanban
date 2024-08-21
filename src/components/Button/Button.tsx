@@ -4,7 +4,8 @@ import { CircularProgress } from "@mui/material";
 
 const Button = ({
   label,
-  type = ButtonType.Primary,
+  type = "button",
+  btnStyle = ButtonType.Primary,
   icon,
   className,
   isLoading = false,
@@ -12,7 +13,8 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <button
-      className={`${styles.button} ${styles[type]} ${className}`}
+      className={`${styles.button} ${styles[btnStyle]} ${className}`}
+      type={type}
       onClick={onClick}
       disabled={isLoading}
     >
