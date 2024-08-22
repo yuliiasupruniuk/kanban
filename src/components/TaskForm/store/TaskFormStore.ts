@@ -3,7 +3,7 @@ import create from "zustand";
 
 type TaskFormStateProps = {
   isOpen: boolean;
-  task?: Task;
+  task?: Task | null;
   openForm: (task?: Task) => void;
   closeForm: () => void;
 };
@@ -19,7 +19,7 @@ const TaskFormStore = create<TaskFormStateProps>((set) => ({
   closeForm: () =>
     set({
       isOpen: false,
-      task: undefined
+      task: null
     }),
 }));
 

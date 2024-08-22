@@ -37,6 +37,7 @@ const TaskForm = () => {
 
   useEffect(() => {
     if (task) resetForm(task);
+    else resetForm({});
   }, [task, resetForm]);
 
   const onSubmit = async (formData: Omit<Task, "id">) => {
