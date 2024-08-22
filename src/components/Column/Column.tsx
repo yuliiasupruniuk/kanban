@@ -14,13 +14,16 @@ const Column = ({
   status: TaskStatusInfo;
   tasks: Task[];
 }) => {
-
   const { setNodeRef } = useDroppable({
-    id: status.value
+    id: status.value,
   });
 
   return (
-<div ref={setNodeRef} id={status.value} className={`${styles.column} gap-6`}>
+    <div
+      ref={setNodeRef}
+      id={status.value}
+      className={`${styles.column} gap-6`}
+    >
       <div className="flex items-center gap-2">
         <div
           className={styles.circle}
@@ -33,13 +36,14 @@ const Column = ({
 
       <div className="flex flex-col gap-6 overflow-auto scroll-smooth">
         <Suspense fallback={<TaskListLoading />}>
-          {tasks.length ? tasks.map((task) => (
-            <TaskCard key={task.id} task={task} />
-          )) : <p className="text-center">No tasks yet</p>}
+          {tasks.length ? (
+            tasks.map((task) => <TaskCard key={task.id} task={task} />)
+          ) : (
+            <p className="text-center">No tasks yet</p>
+          )}
         </Suspense>
       </div>
     </div>
-    
   );
 };
 
