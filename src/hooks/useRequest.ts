@@ -5,7 +5,7 @@ type UseRequestParams<T> = {
   callback: (...args: any[]) => Promise<any>;
   arguments?: any[];
   extraErrorCheck?: (error: any) => void;
-  handleResponse: () => void;
+  handleResponse?: () => void;
   initialLoading?: boolean;
 };
 
@@ -36,12 +36,10 @@ export default function useRequest<T>({
     try {
       const result = await callback(...(args.length > 0 ? args : initialArgs));
       setData(result);
-      handleResponse();
+      handleResponse && handleResponse();
       return result;
     } catch (error: any) {
       openSnackbar(error.message || "An unexpected error occurred");
-      // Comment out this line to avoid re-throwing the error
-      // return Promise.reject(error);
     } finally {
       setIsLoading(false);
     }

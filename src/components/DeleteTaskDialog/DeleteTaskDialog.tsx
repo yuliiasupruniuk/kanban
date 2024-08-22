@@ -10,7 +10,7 @@ import useDeleteTaskDialog from "./hook/useDeleteTaskDialog";
 const DeleteTaskDialog = () => {
   const { taskList, setTasksList } = useTasksStore();
   const { isOpen, task, closeDialog } = useDeleteTaskDialog();
-  const { execute: deleteCurrentTask, isLoading } = useRequest<any>({
+  const { execute: deleteCurrentTask, isLoading } = useRequest({
     callback: deleteTask,
     handleResponse: () => {
       setTasksList(taskList.filter((t) => t.id !== task?.id));

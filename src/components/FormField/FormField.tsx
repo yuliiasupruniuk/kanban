@@ -1,6 +1,12 @@
 import { Controller } from "react-hook-form";
-import { TextField, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
-import { Option } from "./types";
+import {
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
+import { FormFieldProps } from "./types";
 
 const FormField = ({
   name,
@@ -10,22 +16,18 @@ const FormField = ({
   rows,
   select = false,
   options = [],
-}: {
-  name: string;
-  control: any;
-  label: string;
-  multiline?: boolean;
-  rows?: number;
-  select?: boolean;
-  options?: Option[];
-}) => {
+}: FormFieldProps) => {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) =>
         select ? (
-          <FormControl variant="outlined" className="form-field" error={!!error}>
+          <FormControl
+            variant="outlined"
+            className="form-field"
+            error={!!error}
+          >
             <InputLabel>{label}</InputLabel>
             <Select
               {...field}

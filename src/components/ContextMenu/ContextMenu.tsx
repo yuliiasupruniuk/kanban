@@ -17,7 +17,7 @@ function ContextMenu({
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = (event: any) => {
+  const handleClose = () => {
     setAnchorEl(null);
   };
 
@@ -50,9 +50,9 @@ function ContextMenu({
         {options.map((option) => (
           <MenuItem
             key={option.label}
-            onClick={(event) => {
+            onClick={() => {
               option.action();
-              handleClose(event);
+              handleClose();
             }}
           >
             {option.label}

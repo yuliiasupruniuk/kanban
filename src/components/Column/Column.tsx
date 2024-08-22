@@ -3,6 +3,7 @@ import { Suspense, lazy } from "react";
 import TaskListLoading from "components/Task/TaskLoading";
 import { TaskStatusInfo } from "constants/task-statuses";
 import { Task } from "components/Task/types";
+import { useDroppable } from "@dnd-kit/core";
 
 const TaskCard = lazy(() => import("../Task/Task"));
 
@@ -13,8 +14,13 @@ const Column = ({
   status: TaskStatusInfo;
   tasks: Task[];
 }) => {
+
+  const { setNodeRef } = useDroppable({
+    id: status.value
+  });
+
   return (
-    <div id={status.value} className={`${styles.column} gap-6`}>
+<div ref={setNodeRef} id={status.value} className={`${styles.column} gap-6`}>
       <div className="flex items-center gap-2">
         <div
           className={styles.circle}
@@ -33,6 +39,7 @@ const Column = ({
         </Suspense>
       </div>
     </div>
+    
   );
 };
 
