@@ -33,14 +33,14 @@ const createTask = async (task: Omit<Task, "id">): Promise<Task> => {
 
 const updateTask = async (task: Task): Promise<void> => {
   return handleAsyncError(async () => {
-    const taskDocRef = doc(db, "tasks", task.id);
+    const taskDocRef = doc(db, DOCUMENT_NAME, task.id);
     await updateDoc(taskDocRef, task);
   }, "Failed to update task");
 };
 
 const deleteTask = async (id: string): Promise<void> => {
   return handleAsyncError(async () => {
-    const taskDocRef = doc(db, "tasks", id);
+    const taskDocRef = doc(db, DOCUMENT_NAME, id);
     await deleteDoc(taskDocRef);
   }, "Failed to delete task");
 };

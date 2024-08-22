@@ -1,12 +1,11 @@
 @import "../../styles/mixins";
 
 .container {
+    overflow-x: auto;
     @include phone {
         overflow-x: auto;
         scroll-snap-type: both mandatory;
         overscroll-behavior-x: contain;
-
-        padding-bottom: 0;
 
         &* {
             scroll-snap-align: start;

@@ -13,7 +13,7 @@ const TaskCard = ({ task }: { task: Task }) => {
   const { openDialog: openDeleteDialog } = useDeleteTaskDialog();
   const { openForm: openEditDialog } = useTaskForm();
 
-  const { attributes, listeners, setNodeRef, transform, transition } =
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: task.id });
 
 
@@ -24,10 +24,10 @@ const TaskCard = ({ task }: { task: Task }) => {
             transform: CSS.Transform.toString(transform),
             transition,
             cursor: "grab",
-            zIndex: 5
-          }
+            zIndex: isDragging ? 5 : 1
+                    }
         : {},
-    [transform, transition]
+    [transform, transition, isDragging]
   );
 
   const contextMenu = [
@@ -47,9 +47,7 @@ const TaskCard = ({ task }: { task: Task }) => {
       style={style}
       {...listeners}
       {...attributes}
-      className={`${styles.card} ${
-        transform ? styles.dragged : ""
-      } py-5 px-4 bg-secondary rounded-lg`}
+      className={`${styles.card} py-5 px-4 bg-secondary rounded-lg`}
     >
       <div className={`${styles.title} flex justify-between items-center gap-2`}>
         {task.title}

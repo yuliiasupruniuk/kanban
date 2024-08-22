@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   DndContext,
   DragEndEvent,
   DragOverEvent,
+  DragStartEvent,
   KeyboardSensor,
   MouseSensor,
   closestCorners,
@@ -21,6 +22,7 @@ import { TASK_STATUSES } from "constants/task-statuses";
 import Column from "components/Column/Column";
 import styles from "./KanbanView.module.scss";
 import useRequest from "hooks/useRequest";
+import { Task } from "components/Task/types";
 
 const KanbanView = () => {
   const { taskList, setTasksList } = useTasksStore();
@@ -28,6 +30,7 @@ const KanbanView = () => {
   const { execute: updateActiveTask } = useRequest({
     callback: updateTask,
   });
+  const [activeTask, setActiveTask] = useState<Task>();
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -42,26 +45,27 @@ const KanbanView = () => {
     fetchTasks();
   }, [setTasksList, openSnackbar]);
 
+  const handleDragStart = (event: DragStartEvent) => {
+    const { active } = event;
+
+    if (!active.id) return;
+
+    const task = taskList.find((t) => t.id === active.id);
+    if (task) setActiveTask(task);
+  };
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
-    if (!over || active.id === over.id) return;
+    if (!over) return;
 
     const { containerId: overStatus } = over.data?.current?.sortable;
-    const { containerId: activeStatus } = active.data?.current?.sortable;
 
-    if (activeStatus !== overStatus) {
+    if (activeTask?.status !== overStatus) {
       const taskId = active.id;
       const taskIndex = taskList.findIndex((task) => task.id === taskId);
 
       if (taskIndex !== -1) {
-        const updatedTasks = [...taskList];
-        updatedTasks[taskIndex] = {
-          ...updatedTasks[taskIndex],
-          status: overStatus,
-        };
-        updateActiveTask(updatedTasks[taskIndex]);
-        setTasksList(updatedTasks);
+        updateActiveTask(taskList[taskIndex]);
       }
     }
   };
@@ -77,10 +81,7 @@ const KanbanView = () => {
 
     const taskIndex = taskList.findIndex((task) => task.id === taskId);
 
-    if (
-      taskIndex !== -1 &&
-      taskList[taskIndex].status !== overStatus
-    ) {
+    if (taskIndex !== -1 && taskList[taskIndex].status !== overStatus) {
       const updatedTasks = [...taskList];
       updatedTasks[taskIndex] = {
         ...updatedTasks[taskIndex],
@@ -99,6 +100,7 @@ const KanbanView = () => {
     <DndContext
       sensors={sensors}
       collisionDetection={closestCorners}
+      onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
