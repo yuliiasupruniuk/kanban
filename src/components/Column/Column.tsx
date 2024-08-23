@@ -4,6 +4,7 @@ import TaskListLoading from "components/Task/TaskLoading";
 import { TaskStatusInfo } from "constants/task-statuses";
 import { Task } from "components/Task/types";
 import { useDroppable } from "@dnd-kit/core";
+import useTasksStore from "hooks/useTasksStore";
 
 const TaskCard = lazy(() => import("../Task/Task"));
 
@@ -14,6 +15,7 @@ const Column = ({
   status: TaskStatusInfo;
   tasks: Task[];
 }) => {
+  const { isTaskListLoading } = useTasksStore();
   const { setNodeRef } = useDroppable({
     id: status.value,
   });
@@ -36,11 +38,12 @@ const Column = ({
 
       <div className="flex flex-col gap-6 overflow-auto scroll-smooth">
         <Suspense fallback={<TaskListLoading />}>
-          {tasks.length ? (
-            tasks.map((task) => <TaskCard key={task.id} task={task} />)
-          ) : (
-            <p className="text-center">No tasks yet</p>
-          )}
+          {!isTaskListLoading &&
+            (tasks.length ? (
+              tasks.map((task) => <TaskCard key={task.id} task={task} />)
+            ) : (
+              <p className="text-center">No tasks yet</p>
+            ))}
         </Suspense>
       </div>
     </div>

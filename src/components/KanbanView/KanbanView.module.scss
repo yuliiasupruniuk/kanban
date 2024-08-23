@@ -2,8 +2,8 @@
 
 .container {
     overflow-x: auto;
-    @include phone {
-        overflow-x: auto;
+    
+    @include mobile {
         scroll-snap-type: both mandatory;
         overscroll-behavior-x: contain;
 

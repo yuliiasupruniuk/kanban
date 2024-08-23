@@ -25,7 +25,7 @@ import useRequest from "hooks/useRequest";
 import { Task } from "components/Task/types";
 
 const KanbanView = () => {
-  const { taskList, setTasksList } = useTasksStore();
+  const { taskList, setTasksList, setIsTaskListLoading } = useTasksStore();
   const { openSnackbar } = useSnackbar();
   const { execute: updateActiveTask } = useRequest({
     callback: updateTask,
@@ -33,17 +33,20 @@ const KanbanView = () => {
   const [activeTask, setActiveTask] = useState<Task>();
 
   useEffect(() => {
+    setIsTaskListLoading(true)
     const fetchTasks = async () => {
       try {
         const tasks = await getTasks();
         setTasksList(tasks);
       } catch (error) {
         openSnackbar((error as Error).message);
+      } finally {
+        setIsTaskListLoading(false)
       }
     };
 
     fetchTasks();
-  }, [setTasksList, openSnackbar]);
+  }, []);
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
